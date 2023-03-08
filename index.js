@@ -2,6 +2,7 @@
 console.clear();
 import chalkAnimation from "chalk-animation";
 import inquirer from "inquirer";
+import chalk from "chalk";
 const stopTime = () => {
     return new Promise((res) => {
         setTimeout(res, 3500);
@@ -12,7 +13,13 @@ async function welcome() {
     await stopTime();
     rainbowTitle.stop();
 }
-await welcome();
+async function testDesc() {
+    for (let i = 0; i < 5; i++) {
+        let seq = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
+        arrPins.push(seq);
+    }
+    console.log('This is a testing application. Enter one of these pin codes to continue transaction ' + chalk.inverse(arrPins));
+}
 async function AtmQuestions() {
     var e = await inquirer.prompt([
         {
@@ -20,12 +27,18 @@ async function AtmQuestions() {
             name: 'pinCode',
             message: "Enter the Pin Code: ",
             validate(value) {
-                let num1 = value;
                 const pass = value.match(/^\d{4}$/g);
                 if (pass) {
-                    return true;
+                    for (let i = 0; i < arrPins.length; i++) {
+                        if (value == arrPins[i]) {
+                            return true;
+                        }
+                        else if (i == arrPins.length - 1) {
+                            return chalk.bgRed("Pin Code does not exist or wrong.");
+                        }
+                    }
                 }
-                return 'Please enter a valid 4 digits pin code.';
+                return chalk.bgRed("Please enter a valid 4 digits pin code.");
             },
         },
         {
@@ -46,7 +59,7 @@ async function AtmQuestions() {
             message: "Specify the other amount.",
             when(oA) {
                 return oA.amount == "Other Amount";
-            },
+            }
         }
     ])
         .then((answers) => {
@@ -58,13 +71,21 @@ async function AtmQuestions() {
         console.log(JSON.stringify(answers, null, '  '));
     });
 }
-do {
-    await AtmQuestions();
-    var re = await inquirer.prompt([
-        {
-            type: "confirm",
-            name: "restart",
-            message: "Do you like to restart program? Y/N"
-        }
-    ]);
-} while (re.restart);
+async function enterAgain() {
+    do {
+        await AtmQuestions();
+        var re = await inquirer.prompt([
+            {
+                type: "confirm",
+                name: "restart",
+                message: "Do you like to restart program? Y/N",
+                default: "n"
+            }
+        ]);
+    } while (re.restart);
+}
+//-----------------------------------------------------------------------------------------------
+var arrPins = [];
+await welcome();
+await testDesc();
+await enterAgain();
