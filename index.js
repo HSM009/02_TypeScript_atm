@@ -79,7 +79,6 @@ async function enterAgain() {
                 type: "confirm",
                 name: "restart",
                 message: "Do you like to restart program? Y/N",
-                default: "n"
             }
         ]);
     } while (re.restart);
