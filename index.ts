@@ -17,7 +17,7 @@ const stopTime = ()=>{
 
 
 async function welcome() {
-    let rainbowTitle = chalkAnimation.neon("Welcome To ATM Banking!\n\nCoded By Hosein Sirat Mohammad\n");
+    let rainbowTitle = chalkAnimation.neon(chalk.blueBright("Welcome To ATM Banking!\n\nCoded By Hosein Sirat Mohammad\n"));
     await stopTime();
     rainbowTitle.stop();
 }
