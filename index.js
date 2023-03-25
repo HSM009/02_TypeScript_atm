@@ -57,6 +57,14 @@ async function AtmQuestions() {
             type: "input",
             name: "OtherAmount",
             message: "Specify the other amount.",
+            validate: function (value) {
+                if (isNaN(value)) {
+                    return chalk.bgRedBright('Input wrong. Must enter number.');
+                }
+                else {
+                    return true;
+                }
+            },
             when(oA) {
                 return oA.amount == "Other Amount";
             }
